@@ -60,6 +60,7 @@
 import BarChart from "./BarChart.vue";
 import DoughnutChart from "./DoughnutChart.vue";
 import Form from './Form.vue';
+import * as Reports from '../api/reports';
 
 export default {
   name: "numberCases",
@@ -67,7 +68,8 @@ export default {
   components: {
     BarChart,
     DoughnutChart,
-    Form
+    Form,
+    Reports
   },
 
   data() {
@@ -86,43 +88,24 @@ export default {
   },
 
   methods: {
-    async getAlerts(date) {
+    async getAlerts() {
       this.token = localStorage.getItem('token')
       this.city = localStorage.getItem('city')
-      this.$api.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${this.token}`;
-      await this.$api
-      .get(`/alert?init=${date.init}&final=${date.final}&city=${this.city}`)
+      
+      await Reports.getAlertsByCity()
       .then((response) => {
-          this.alertsByDates = response.data.Date;
-          this.alertsByDistricts = response.data.District;
-          this.isLoadedAlert = true;
-          this.isLoadedComplaint = false;
-          if(Object.values(this.alertsByDates).length == 0 || Object.values(this.alertsByDistricts).length == 0) this.isEmpty = true;
-          else this.isEmpty = false;
-      }).catch(() => this.logout())
+        console.log(response.data)
+      })
     },
 
-    async getComplaints(date, typeComplaint) {
+    async getComplaints(date) {
       this.token = localStorage.getItem('token')
       this.city = localStorage.getItem('city')
-      const type = typeComplaint == "Todas" ? "all" : typeComplaint;
       
-      this.$api.defaults.headers.common[
-      "Authorization"
-      ] = `Bearer ${this.token}`;
-      await this.$api
-      .get(`/complaint?init=${date.init}&final=${date.final}&city=${this.city}&type=${type}`)
+      await Reports.getComplaintsByPeriod(date.init, date.final)
       .then((response) => {
-          this.complaintsByDates = response.data.Date;
-          this.complaintsByDistricts = response.data.District;
-          this.complaintsByTypes = response.data.Type;
-          this.isLoadedComplaint = true;
-          this.isLoadedAlert = false;
-          if(Object.values(this.complaintsByDates).length == 0 || Object.values(this.complaintsByDistricts).length == 0 || Object.values(this.complaintsByTypes).length == 0) this.isEmpty = true;
-          else this.isEmpty = false;
-      }).catch(() => this.logout())
+        console.log(response.data);
+      })
     },
 
     cleanLoading(){

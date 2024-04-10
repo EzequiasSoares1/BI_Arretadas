@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <img src="../assets/logo.png" alt="Logo arretadas" />
-    <p class="title">Relatórios</p>
+    <h2>Relatorios</h2>
     <v-btn v-show="showBtn" title="Sair" color="#00d1b2" depressed @click="logout">
       <v-icon color="#fff">mdi-logout</v-icon>
     </v-btn>
@@ -41,22 +41,24 @@ export default {
 </script>
 
 <style scoped>
+
+
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #00d1b2;
-  padding: 1rem 10rem;
+  padding: 1rem 1rem;
   width: 100%;
 }
 
-.title {
-  font-size: 2.5rem;
+h2{
+  font-size: 25px;
   color: #fff;
 }
 
 img {
-  height: 70px;
+  height: 50px;
 }
 
 @media only screen and (max-width: 800px) {
