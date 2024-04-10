@@ -2,9 +2,17 @@
   <header class="header">
     <img src="../assets/logo.png" alt="Logo arretadas" />
     <h2>Relatorios</h2>
-    <v-btn v-show="showBtn" title="Sair" color="#00d1b2" depressed @click="logout">
-      <v-icon color="#fff">mdi-logout</v-icon>
-    </v-btn>
+    <ul>
+      <v-btn v-show="showBtn" class="notification" color="#00d1b2" title="Notification" depressed @click="toggleNotification">
+        <v-badge v-if="notificationCount > 0" color="error" :content="notificationCount">
+          <v-icon color="#fff">mdi-bell-outline</v-icon>
+        </v-badge>
+        <v-icon v-else color="#fff">mdi-bell-outline</v-icon>
+      </v-btn>
+      <v-btn v-show="showBtn" title="Sair" color="#00d1b2" depressed @click="logout">
+        <v-icon color="#fff">mdi-logout</v-icon>
+      </v-btn>
+  </ul>
   </header>
 </template>
 
@@ -22,7 +30,9 @@ export default {
 
   data() {
     return {
-      showBtn: false
+      showBtn: false,
+      notificationCount: 0, 
+      notificationVisible: false
     }
   },
 
@@ -32,6 +42,35 @@ export default {
   },
 
   methods: {
+    toggleNotification() {
+      if (this.notificationVisible) {
+        this.updateNotificationContent();
+      } else {
+        this.clearNotificationContent();
+      }
+    },
+    addNotification() {
+      this.notificationCount++;
+    },
+
+    removeNotification() {
+      if (this.notificationCount > 0) {
+        this.notificationCount--;
+      }
+    },
+
+    clearNotifications() {
+      this.notificationCount = 0;
+    },
+
+    updateNotificationContent() {
+      this.addNotification();
+    },
+
+    clearNotificationContent() {
+      this.removeNotification();
+    },
+    
     logout(){
       localStorage.removeItem("token");
       this.$router.replace("/");
