@@ -70,7 +70,7 @@ export default {
     clearNotificationContent() {
       this.removeNotification();
     },
-    
+
     logout(){
       localStorage.removeItem("token");
       this.$router.replace("/");
@@ -92,7 +92,9 @@ export default {
 }
 
 h2{
+  align-self: center;
   font-size: 25px;
+  padding-left: 55px;
   color: #fff;
 }
 
@@ -110,3 +112,4 @@ img {
   }
 }
 </style>
+

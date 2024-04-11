@@ -1,4 +1,4 @@
-<template>
+cv <template>
     <div class="container">
         <v-snackbar v-model="snackbar" :timeout="timeout" color="error" rounded>
             {{ text }}

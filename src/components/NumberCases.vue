@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <Form @my-alerts="getAlerts" @my-complaints="getComplaints" @my-clean="cleanLoading"/>
-
-    
+    <Form @my-alerts="getAlerts" @my-complaints="getComplaints" @my-clean="cleanLoading"></Form>
     <div class="container-chart">
       <div class="chart-alerts" v-if="isLoadedAlert && !isEmpty">
         <h2>Por Data (dados em %)</h2>
@@ -74,6 +72,7 @@ export default {
 
   data() {
     return {
+      imageUrl: im,
       token: "",
       city: "",
       isLoadedAlert: false,
@@ -123,7 +122,7 @@ export default {
 </script>
 
 <style scoped>
-
+.card
 .showMap {
   display: grid;
   justify-content: center;

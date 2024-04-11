@@ -2,6 +2,8 @@
   <v-app>
     <Header></Header>
     <div class="box">
+      <Card class="card"></Card>
+      <br>
       <h2>Pesquisar</h2>
       <NumberCases></NumberCases>
     </div>
@@ -15,14 +17,15 @@ import Header from "../components/Header";
 import NumberCases from "../components/NumberCases";
 import Footer from "../components/Footer";
 import { validateToken } from "@/services/validationToken";
-
 import "@mdi/font/css/materialdesignicons.css";
+import Card from "../components/Card.vue";
 
 export default {
   name: "app",
   vuetify,
   components: {
     Header,
+    Card,
     NumberCases,
     Footer,
   },
