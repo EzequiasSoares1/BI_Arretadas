@@ -48,7 +48,6 @@ export const getAllAlerts = () => {
 export const getAlertsByPeriod = (startDate, endDate) => {
     return axiosInstance.get('/reports/alerts/period', {
         params: {
-        cityName,
         startDate,
         endDate
         }

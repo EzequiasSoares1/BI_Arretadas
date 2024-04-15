@@ -1,7 +1,7 @@
 <template>
   <ul class="cards-container">
     <div class="card-1"  >
-      <img src="../assets/pessoas.png" alt="altText" class="card-image">
+      <img src="../assets/pessoas.png" alt="Ícone Pessoas" class="card-image">
       <div class="card-content" >
         <h4 class="card-description">{{ this.amountUsers }}</h4>
         <p class="card-title">Usuarios</p>
@@ -9,14 +9,14 @@
     </div>
   
     <div  class="card-2">
-      <img src="../assets/perigo.png" alt="altText" class="card-image">
+      <img src="../assets/perigo.png" alt="Ícone Perigo" class="card-image">
       <div class="card-content">
         <h4 class="card-description">{{this.totalAlerts}}</h4>
         <p class="card-title">Alertas</p>
       </div>
     </div>
     <div  class="card-3">
-      <img src="../assets/megafone.png" alt="altText" class="card-image">
+      <img src="../assets/megafone.png" alt="Ícone Megafone" class="card-image">
       <div class="card-content">
         <h4 class="card-description">{{ this.amountComplaintsByCity}}</h4>
         <p class="card-title">Denuncias</p>
@@ -27,7 +27,7 @@
 
 <script>
 
-import * as Reports from '../api/reports';
+import * as Reports from '../api/reports.js';
 
 export default {
   name: 'Card',
@@ -46,42 +46,29 @@ export default {
 
   },
 
- 
   methods: {
     async getUsers() {
       try {
-        let city = localStorage.getItem('city');
-        city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()
         const response = await Reports.getAllUsers();
-        const usersByCity = response.data.usersByCity;
-
-        if (city.toLowerCase() === "cidade n/d") { city = "undefined";}
-
-        if (usersByCity.hasOwnProperty(city) ) {
-          this.amountUsers = usersByCity[city];
-        } else {
-          this.amountUsers = 0;
-        }
+        this.amountUsers = response.data.amountUsers;
+        
       } catch (error) {
         console.error("Error getting users:", error);
       }
     },
 
-    async getAlerts() {
+    async getAlerts(dates) {
       try {
-        const city = localStorage.getItem('city'); 
-        const response = await Reports.getAllAlerts();
-        const alertsByCityAndLocation = response.data.alertsByCityAndLocation;
-
-        let totalAlerts = 0;
-        for (const alert of alertsByCityAndLocation) {
-          if (alert.city === city || city.toLowerCase() === "cidade n/d") {
-            totalAlerts += alert.locations.length; 
-          }
+        if(dates == null){
+          this.totalAlerts = (await Reports.getAllAlerts()).data.totalAlerts;
+        }else{
+          console.log(dates.init);
+          console.log(dates.final);
+          const response = await Reports.getAlertsByPeriod(dates.init, dates.final);
+          this.totalAlerts = response.data.totalAlerts;
         }
-        this.totalAlerts = totalAlerts;
       } catch (error) {
-        console.error("Error getting alerts:", error);
+          console.error("Error getting alerts:", error);
       }
     },
 
@@ -105,6 +92,7 @@ export default {
 </script>
 
 <style scoped>
+
 .cards-container {
   display: flex;
   justify-content: center; 

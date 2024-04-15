@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <Card :alertsComplaintsData="dadosRecebidos"></Card>
+    <h2 class="pesquisar">Pesquisar</h2>
     <Form @my-alerts="getAlerts" @my-complaints="getComplaints" @my-clean="cleanLoading"></Form>
     <div class="container-chart">
       <div class="chart-alerts" v-if="isLoadedAlert && !isEmpty">
@@ -58,12 +60,14 @@
 import BarChart from "./BarChart.vue";
 import DoughnutChart from "./DoughnutChart.vue";
 import Form from './Form.vue';
+import Card from './Card.vue'
 import * as Reports from '../api/reports';
 
 export default {
   name: "numberCases",
   
   components: {
+    Card,
     BarChart,
     DoughnutChart,
     Form,
@@ -72,7 +76,12 @@ export default {
 
   data() {
     return {
-      imageUrl: im,
+      alertsComplaintsData: {
+        totalAlerts:0,
+        totalComplaints:0,
+        fisica:0
+      },
+      imageUrl: "",
       token: "",
       city: "",
       isLoadedAlert: false,
@@ -88,10 +97,8 @@ export default {
 
   methods: {
     async getAlerts() {
-      this.token = localStorage.getItem('token')
-      this.city = localStorage.getItem('city')
       
-      await Reports.getAlertsByCity()
+      await Reports.getAllAlerts()
       .then((response) => {
         console.log(response.data)
       })
@@ -122,6 +129,15 @@ export default {
 </script>
 
 <style scoped>
+
+.pesquisar {
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 .card
 .showMap {
   display: grid;

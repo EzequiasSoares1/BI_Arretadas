@@ -2,9 +2,7 @@
   <v-app>
     <Header></Header>
     <div class="box">
-      <Card class="card"></Card>
       <br>
-      <h2>Pesquisar</h2>
       <NumberCases></NumberCases>
     </div>
     <Footer></Footer>
@@ -64,13 +62,7 @@ export default {
 
 <style >
 .box {
-  margin: 2rem 0 auto;
+  margin: 0.7rem 0 auto;
 }
 
-.box h2 {
-  text-align: center;
-  font-weight: bold;
-  font-size: 25px;
-  margin-bottom: 1em;
-}
 </style>
