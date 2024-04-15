@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <Card :alertsComplaintsData="dadosRecebidos"></Card>
+    <Card :alertsComplaintsData="alertsComplaintsData"></Card>
     <h2 class="pesquisar">Pesquisar</h2>
     <Form @my-alerts="getAlerts" @my-complaints="getComplaints" @my-clean="cleanLoading"></Form>
     <div class="container-chart">
@@ -77,9 +77,16 @@ export default {
   data() {
     return {
       alertsComplaintsData: {
+        totalUsers:0,
         totalAlerts:0,
         totalComplaints:0,
-        fisica:0
+        fisica:0,
+        Moral:0,
+        Sexual:0,
+        Patrimonial:0,
+        Psicológica:0,
+        Verbal:0,
+        clear:false
       },
       imageUrl: "",
       token: "",
@@ -90,23 +97,43 @@ export default {
     };
   },
 
+  mounted(){
+    this.getAlerts();
+  },
+
   methods: {
-    async getAlerts() {
-      
-      await Reports.getAllAlerts()
-      .then((response) => {
-        console.log(response.data)
-      })
+    async getAlerts(dates) {
+      if(dates == null){
+        this.alertsComplaintsData.totalAlerts = (await Reports.getAllAlerts()).data.totalAlerts;
+      }else{
+        const response = await Reports.getAlertsByPeriod(dates.init, dates.final);
+        this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
+      }
+      // this.token = localStorage.getItem('token')
+      // this.city = localStorage.getItem('city')
+      // await Reports.getAlertsByPeriod(dates.init, dates.final)
+      // .then((response) => {
+      //   this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
+      //   console.log(response.data)
+      // })
     },
 
-    async getComplaints(date) {
-      this.token = localStorage.getItem('token')
-      this.city = localStorage.getItem('city')
+    // async getComplaints(date) {
+    //   this.token = localStorage.getItem('token')
+    //   this.city = localStorage.getItem('city')
       
-      await Reports.getComplaintsByPeriod(date.init, date.final)
-      .then((response) => {
-        console.log(response.data);
-      })
+    //   await Reports.getComplaintsByPeriod(date.init, date.final)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    // },
+      async getComplaints(dates) {
+      if(dates == null){
+        this.alertsComplaintsData.totalComplaints = (await Reports.getAllComplaints()).data.totalComplaints;
+      }else{
+        const response = await Reports.getComplaintsByPeriod(dates.init, dates.final);
+        this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
+      }
     },
 
     cleanLoading(){

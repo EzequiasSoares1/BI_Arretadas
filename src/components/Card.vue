@@ -3,7 +3,7 @@
     <div class="card-1"  >
       <img src="../assets/pessoas.png" alt="Ícone Pessoas" class="card-image">
       <div class="card-content" >
-        <h4 class="card-description">{{ this.amountUsers }}</h4>
+        <h4 class="card-description">{{ this.alertsComplaintsData.totalUsers }}</h4>
         <p class="card-title">Usuarios</p>
       </div>
     </div>
@@ -11,14 +11,14 @@
     <div  class="card-2">
       <img src="../assets/perigo.png" alt="Ícone Perigo" class="card-image">
       <div class="card-content">
-        <h4 class="card-description">{{this.totalAlerts}}</h4>
+        <h4 class="card-description">{{this.alertsComplaintsData.totalAlerts }}</h4>
         <p class="card-title">Alertas</p>
       </div>
     </div>
     <div  class="card-3">
       <img src="../assets/megafone.png" alt="Ícone Megafone" class="card-image">
       <div class="card-content">
-        <h4 class="card-description">{{ this.amountComplaintsByCity}}</h4>
+        <h4 class="card-description">{{ this.alertsComplaintsData.totalComplaints }}</h4>
         <p class="card-title">Denuncias</p>
       </div>
     </div>
@@ -26,69 +26,13 @@
   </template>
 
 <script>
-
-import * as Reports from '../api/reports.js';
-
 export default {
   name: 'Card',
-  data() {
-    return {
-      amountUsers: 0,
-      totalAlerts: 0,
-      amountComplaintsByCity: 0,
-    };
-  },
-
-  mounted() {
-    this.getUsers();
-    this.getAlerts();
-    this.getComplaints();
-
-  },
-
-  methods: {
-    async getUsers() {
-      try {
-        const response = await Reports.getAllUsers();
-        this.amountUsers = response.data.amountUsers;
-        
-      } catch (error) {
-        console.error("Error getting users:", error);
-      }
-    },
-
-    async getAlerts(dates) {
-      try {
-        if(dates == null){
-          this.totalAlerts = (await Reports.getAllAlerts()).data.totalAlerts;
-        }else{
-          console.log(dates.init);
-          console.log(dates.final);
-          const response = await Reports.getAlertsByPeriod(dates.init, dates.final);
-          this.totalAlerts = response.data.totalAlerts;
-        }
-      } catch (error) {
-          console.error("Error getting alerts:", error);
-      }
-    },
-
-    async getComplaints() {
-      try {
-        const city = localStorage.getItem('city').toLowerCase(); 
-        const response = await Reports.getAllComplaints();
-        const complaintsByCity = response.data.complaintsByCity;
-
-        if (complaintsByCity.hasOwnProperty(city)) {
-          this.amountComplaintsByCity = complaintsByCity[city];
-        } else {
-          this.amountComplaintsByCity = 0;
-        }
-      } catch (error) {
-        console.error("Error getting complaints:", error);
-      }
-   }, 
+  props:{
+    alertsComplaintsData:Object
   }
 }
+ 
 </script>
 
 <style scoped>
