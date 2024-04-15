@@ -78,7 +78,6 @@ export default {
       isLoadedAlert: false,
       isLoadedComplaint: false,
       isEmpty: false,
-  
     };
   },
 
