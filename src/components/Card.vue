@@ -103,8 +103,8 @@ export default {
   grid-template-columns: auto 1fr;
   
   border-radius: 8px;
-  width: 250px; /* Altere o valor conforme necessário */
-  height: 80px; /* Altere o valor conforme necessário */
+  width: 250px; 
+  height: 80px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease;

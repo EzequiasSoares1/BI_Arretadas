@@ -87,11 +87,6 @@ export default {
       isLoadedAlert: false,
       isLoadedComplaint: false,
       isEmpty: false,
-      alertsByDates: {},
-      alertsByDistricts: {},
-      complaintsByDates: {},
-      complaintsByDistricts: {},
-      complaintsByTypes: {},
     };
   },
 
