@@ -5,7 +5,7 @@
       <Card class="card"></Card>
       <br>
       <h2>Pesquisar</h2>
-      <NumberCases></NumberCases>
+    
     </div>
     <Footer></Footer>
   </v-app>
