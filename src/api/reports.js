@@ -35,8 +35,7 @@ export const getComplaintsByPeriod = (startDate, endDate) => {
   return axiosInstance.get('/reports/complaints/period', {
     params: {
       startDate,
-      endDate,
-      cityName
+      endDate
     }
   });
 }
@@ -48,7 +47,6 @@ export const getAllAlerts = () => {
 export const getAlertsByPeriod = (startDate, endDate) => {
     return axiosInstance.get('/reports/alerts/period', {
         params: {
-        cityName,
         startDate,
         endDate
         }

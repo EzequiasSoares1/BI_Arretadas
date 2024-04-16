@@ -1,24 +1,24 @@
 <template>
   <ul class="cards-container">
     <div class="card-1"  >
-      <img src="../assets/pessoas.png" alt="altText" class="card-image">
+      <img src="../assets/pessoas.png" alt="Ícone Pessoas" class="card-image">
       <div class="card-content" >
-        <h4 class="card-description">{{ this.amountUsers }}</h4>
+        <h4 class="card-description">{{ this.alertsComplaintsData.totalUsers }}</h4>
         <p class="card-title">Usuarios</p>
       </div>
     </div>
   
     <div  class="card-2">
-      <img src="../assets/perigo.png" alt="altText" class="card-image">
+      <img src="../assets/perigo.png" alt="Ícone Perigo" class="card-image">
       <div class="card-content">
-        <h4 class="card-description">{{this.totalAlerts}}</h4>
+        <h4 class="card-description">{{this.alertsComplaintsData.totalAlerts }}</h4>
         <p class="card-title">Alertas</p>
       </div>
     </div>
     <div  class="card-3">
-      <img src="../assets/megafone.png" alt="altText" class="card-image">
+      <img src="../assets/megafone.png" alt="Ícone Megafone" class="card-image">
       <div class="card-content">
-        <h4 class="card-description">{{ this.amountComplaintsByCity}}</h4>
+        <h4 class="card-description">{{ this.alertsComplaintsData.totalComplaints }}</h4>
         <p class="card-title">Denuncias</p>
       </div>
     </div>
@@ -26,85 +26,17 @@
   </template>
 
 <script>
-
-import * as Reports from '../api/reports';
-
 export default {
   name: 'Card',
-  data() {
-    return {
-      amountUsers: 0,
-      totalAlerts: 0,
-      amountComplaintsByCity: 0,
-    };
-  },
-
-  mounted() {
-    this.getUsers();
-    this.getAlerts();
-    this.getComplaints();
-
-  },
-
- 
-  methods: {
-    async getUsers() {
-      try {
-        let city = localStorage.getItem('city');
-        city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()
-        const response = await Reports.getAllUsers();
-        const usersByCity = response.data.usersByCity;
-
-        if (city.toLowerCase() === "cidade n/d") { city = "undefined";}
-
-        if (usersByCity.hasOwnProperty(city) ) {
-          this.amountUsers = usersByCity[city];
-        } else {
-          this.amountUsers = 0;
-        }
-      } catch (error) {
-        console.error("Error getting users:", error);
-      }
-    },
-
-    async getAlerts() {
-      try {
-        const city = localStorage.getItem('city'); 
-        const response = await Reports.getAllAlerts();
-        const alertsByCityAndLocation = response.data.alertsByCityAndLocation;
-
-        let totalAlerts = 0;
-        for (const alert of alertsByCityAndLocation) {
-          if (alert.city === city || city.toLowerCase() === "cidade n/d") {
-            totalAlerts += alert.locations.length; 
-          }
-        }
-        this.totalAlerts = totalAlerts;
-      } catch (error) {
-        console.error("Error getting alerts:", error);
-      }
-    },
-
-    async getComplaints() {
-      try {
-        const city = localStorage.getItem('city').toLowerCase(); 
-        const response = await Reports.getAllComplaints();
-        const complaintsByCity = response.data.complaintsByCity;
-
-        if (complaintsByCity.hasOwnProperty(city)) {
-          this.amountComplaintsByCity = complaintsByCity[city];
-        } else {
-          this.amountComplaintsByCity = 0;
-        }
-      } catch (error) {
-        console.error("Error getting complaints:", error);
-      }
-   }, 
+  props:{
+    alertsComplaintsData:Object
   }
 }
+ 
 </script>
 
 <style scoped>
+
 .cards-container {
   display: flex;
   justify-content: center; 
