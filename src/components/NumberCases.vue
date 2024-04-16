@@ -98,42 +98,53 @@ export default {
   },
 
   mounted(){
+    this.getUsers();
     this.getAlerts();
   },
 
   methods: {
-    async getAlerts(dates) {
-      if(dates == null){
-        this.alertsComplaintsData.totalAlerts = (await Reports.getAllAlerts()).data.totalAlerts;
-      }else{
-        const response = await Reports.getAlertsByPeriod(dates.init, dates.final);
-        this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
+    async getUsers(){
+      try{
+        const response = await Reports.getAllUsers()
+        this.alertsComplaintsData.totalUsers = response.data.amountUsers
+      }catch(error){
+        // eslint-disable-next-line no-console
+        console.error("Error getting Users", error)
       }
-      // this.token = localStorage.getItem('token')
-      // this.city = localStorage.getItem('city')
-      // await Reports.getAlertsByPeriod(dates.init, dates.final)
-      // .then((response) => {
-      //   this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
-      //   console.log(response.data)
-      // })
+    },
+    async getAlerts(dates) {
+      try{
+        if(!dates){
+          this.alertsComplaintsData.totalAlerts = (await Reports.getAllAlerts()).data.totalAlerts;
+        }else{
+          const response = await Reports.getAlertsByPeriod(dates.init, dates.final);
+          if(!response) {
+            this.alertsComplaintsData.totalAlerts = 0
+          }
+          else {
+            this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
+          }
+        }
+        this.alertsComplaintsData.clear = false;
+      }catch(error){ 
+        this.alertsComplaintsData.totalAlerts = 0;
+        // eslint-disable-next-line no-console
+        console.error("Error getting alerts", error);
+      }
     },
 
-    // async getComplaints(date) {
-    //   this.token = localStorage.getItem('token')
-    //   this.city = localStorage.getItem('city')
-      
-    //   await Reports.getComplaintsByPeriod(date.init, date.final)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //   })
-    // },
-      async getComplaints(dates) {
-      if(dates == null){
+      async getComplaints(dates, type) {
+      if(!dates){
         this.alertsComplaintsData.totalComplaints = (await Reports.getAllComplaints()).data.totalComplaints;
       }else{
-        const response = await Reports.getComplaintsByPeriod(dates.init, dates.final);
+        const response = await Reports.getComplaintsByPeriod(dates.init, dates.final, type);
+        if(!response){
+          this.alertsComplaintsData.totalComplaints = 0;
+        }else{
         this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
+        } 
       }
+      this.alertsComplaintsData.clear = false;
     },
 
     cleanLoading(){
