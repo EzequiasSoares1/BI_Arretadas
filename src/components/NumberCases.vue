@@ -100,6 +100,7 @@ export default {
   mounted(){
     this.getUsers();
     this.getAlerts();
+    this.getComplaints()
   },
 
   methods: {
@@ -133,18 +134,23 @@ export default {
       }
     },
 
-      async getComplaints(dates, type) {
-      if(!dates){
-        this.alertsComplaintsData.totalComplaints = (await Reports.getAllComplaints()).data.totalComplaints;
-      }else{
-        const response = await Reports.getComplaintsByPeriod(dates.init, dates.final, type);
-        if(!response){
-          this.alertsComplaintsData.totalComplaints = 0;
-        }else{
-        this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
-        } 
+      async getComplaints(dates) { // adicionar type, talvez ver se data é nulo direto no controller
+        try{
+          if(!dates){
+            this.alertsComplaintsData.totalComplaints = (await Reports.getAllComplaints()).data.amountComplaints;
+          }else{
+            const response = await Reports.getComplaintsByPeriod(dates.init, dates.final);
+            if(!response){
+              this.alertsComplaintsData.totalComplaints = 0;
+            }else{
+            this.alertsComplaintsData.totalComplaints = response.data.totalComplaints;
+            } 
+        }
+      }catch(error){
+        this.alertsComplaintsData.totalComplaints = 0;
+        // eslint-disable-next-line no-console
+        console.error(error)
       }
-      this.alertsComplaintsData.clear = false;
     },
 
     cleanLoading(){
