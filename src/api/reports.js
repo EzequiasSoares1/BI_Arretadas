@@ -40,6 +40,16 @@ export const getComplaintsByPeriod = (startDate, endDate) => {
   });
 }
 
+export const getComplaintsByPeriodAndType = (startDate, endDate, type) => {
+  return axiosInstance.get('/reports/complaints/periodAndType', {
+    params: {
+      startDate,
+      endDate,
+      type
+    }
+  });
+}
+
 export const getAllAlerts = () => {
     return axiosInstance.get('/reports/alerts');
   }
