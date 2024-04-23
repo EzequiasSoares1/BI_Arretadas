@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <Card :allData="allData"></Card>
+    <Card :allData="cardsData"></Card>
     <h2>Pesquisar</h2>
     <Form @my-alerts="getAlerts" @my-complaints="getComplaints" @my-clean="cleanLoading"></Form>
     <div class="container-chart">
@@ -76,7 +76,7 @@ export default {
 
   data() {
     return {
-      allData: {
+      cardsData: {
         totalUsers:0,
         totalAlerts:0,
         totalComplaints:0
@@ -98,9 +98,9 @@ export default {
   methods: {
     async getData(){
       this.city = localStorage.getItem("city")
-      this.allData.totalUsers = (await (Reports.getAllUsersByCity())).data.amountUsers
-      this.allData.totalComplaints = (await (Reports.getComplaintsByCity())).data.amountComplaintsByCity 
-      this.allData.totalAlerts = (await (Reports.getAllAlerts())).data.totalAlerts
+      this.cardsData.totalUsers = (await (Reports.getAllUsersByCity())).data.amountUsers
+      this.cardsData.totalComplaints = (await (Reports.getComplaintsByCity())).data.amountComplaintsByCity 
+      this.cardsData.totalAlerts = (await (Reports.getAllAlerts())).data.totalAlerts
     },
 
     async getAlerts() {
