@@ -6,6 +6,10 @@ export const getAllAdminUsers = () => {
   return axiosInstance.get('/reports/usersAdm');
 }
 
+export const getAllUsersByCity = () => {
+  return axiosInstance.get(`/reports/users/${cityName}`)
+}
+
 export const getAllUsers = () => {
   return axiosInstance.get('/reports/users');
 }

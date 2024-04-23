@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <Card :alertsComplaintsData="alertsComplaintsData"></Card>
-    <h2 class="pesquisar">Pesquisar</h2>
+    <Card :allData="allData"></Card>
+    <h2>Pesquisar</h2>
     <Form @my-alerts="getAlerts" @my-complaints="getComplaints" @my-clean="cleanLoading"></Form>
     <div class="container-chart">
       <div class="chart-alerts" v-if="isLoadedAlert && !isEmpty">
@@ -60,33 +60,26 @@
 import BarChart from "./BarChart.vue";
 import DoughnutChart from "./DoughnutChart.vue";
 import Form from './Form.vue';
-import Card from './Card.vue'
 import * as Reports from '../api/reports';
+import Card from "./Card.vue";
 
 export default {
   name: "numberCases",
   
   components: {
-    Card,
     BarChart,
     DoughnutChart,
     Form,
+    Card,
     Reports
   },
 
   data() {
     return {
-      alertsComplaintsData: {
+      allData: {
         totalUsers:0,
         totalAlerts:0,
-        totalComplaints:0,
-        fisica:0,
-        Moral:0,
-        Sexual:0,
-        Patrimonial:0,
-        Psicológica:0,
-        Verbal:0,
-        clear:false
+        totalComplaints:0
       },
       imageUrl: "",
       token: "",
@@ -94,63 +87,40 @@ export default {
       isLoadedAlert: false,
       isLoadedComplaint: false,
       isEmpty: false,
+  
     };
   },
 
   mounted(){
-    this.getUsers();
-    this.getAlerts();
-    this.getComplaints()
+    this.getData();
   },
 
   methods: {
-    async getUsers(){
-      try{
-        const response = await Reports.getAllUsers()
-        this.alertsComplaintsData.totalUsers = response.data.amountUsers
-      }catch(error){
-        // eslint-disable-next-line no-console
-        console.error("Error getting Users", error)
-      }
-    },
-    async getAlerts(dates) {
-      try{
-        if(!dates){
-          this.alertsComplaintsData.totalAlerts = (await Reports.getAllAlerts()).data.totalAlerts;
-        }else{
-          const response = await Reports.getAlertsByPeriod(dates.init, dates.final);
-          if(!response) {
-            this.alertsComplaintsData.totalAlerts = 0
-          }
-          else {
-            this.alertsComplaintsData.totalAlerts = response.data.totalAlerts;
-          }
-        }
-        this.alertsComplaintsData.clear = false;
-      }catch(error){ 
-        this.alertsComplaintsData.totalAlerts = 0;
-        // eslint-disable-next-line no-console
-        console.error("Error getting alerts", error);
-      }
+    async getData(){
+      this.city = localStorage.getItem("city")
+      this.allData.totalUsers = (await (Reports.getAllUsersByCity())).data.amountUsers
+      this.allData.totalComplaints = (await (Reports.getComplaintsByCity())).data.amountComplaintsByCity 
+      this.allData.totalAlerts = (await (Reports.getAllAlerts())).data.totalAlerts
     },
 
-      async getComplaints(dates) { // adicionar type, talvez ver se data é nulo direto no controller
-        try{
-          if(!dates){
-            this.alertsComplaintsData.totalComplaints = (await Reports.getAllComplaints()).data.amountComplaints;
-          }else{
-            const response = await Reports.getComplaintsByPeriod(dates.init, dates.final);
-            if(!response){
-              this.alertsComplaintsData.totalComplaints = 0;
-            }else{
-            this.alertsComplaintsData.totalComplaints = response.data.totalComplaints;
-            } 
-        }
-      }catch(error){
-        this.alertsComplaintsData.totalComplaints = 0;
-        // eslint-disable-next-line no-console
-        console.error(error)
-      }
+    async getAlerts() {
+      this.token = localStorage.getItem('token')
+      this.city = localStorage.getItem('city')
+      
+      await Reports.getAlertsByCity()
+      .then((response) => {
+        console.log(response.data)
+      })
+    },
+
+    async getComplaints(date) {
+      this.token = localStorage.getItem('token')
+      this.city = localStorage.getItem('city')
+      
+      await Reports.getComplaintsByPeriod(date.init, date.final)
+      .then((response) => {
+        console.log(response.data);
+      })
     },
 
     cleanLoading(){
@@ -168,15 +138,6 @@ export default {
 </script>
 
 <style scoped>
-
-.pesquisar {
-  text-align: center;
-  font-weight: bold;
-  font-size: 25px;
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
 .card
 .showMap {
   display: grid;
