@@ -3,7 +3,7 @@
     <div class="card-1"  >
       <img src="../assets/pessoas.png" alt="Ícone Pessoas" class="card-image">
       <div class="card-content" >
-        <h4 class="card-description">{{ this.alertsComplaintsData.totalUsers }}</h4>
+        <h4 class="card-description">{{ this.allData.totalUsers }}</h4>
         <p class="card-title">Usuarios</p>
       </div>
     </div>
@@ -11,14 +11,14 @@
     <div  class="card-2">
       <img src="../assets/perigo.png" alt="Ícone Perigo" class="card-image">
       <div class="card-content">
-        <h4 class="card-description">{{this.alertsComplaintsData.totalAlerts }}</h4>
+        <h4 class="card-description">{{ this.allData.totalAlerts }}</h4>
         <p class="card-title">Alertas</p>
       </div>
     </div>
     <div  class="card-3">
       <img src="../assets/megafone.png" alt="Ícone Megafone" class="card-image">
       <div class="card-content">
-        <h4 class="card-description">{{ this.alertsComplaintsData.totalComplaints }}</h4>
+        <h4 class="card-description">{{ this.allData.totalComplaints }}</h4>
         <p class="card-title">Denuncias</p>
       </div>
     </div>
@@ -26,13 +26,12 @@
   </template>
 
 <script>
-export default {
-  name: 'Card',
-  props:{
-    alertsComplaintsData:Object
+  export default {
+    name: 'Card',
+    props:{
+      allData:Object
+    } 
   }
-}
- 
 </script>
 
 <style scoped>
