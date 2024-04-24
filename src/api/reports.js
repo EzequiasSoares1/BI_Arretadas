@@ -7,7 +7,11 @@ export const getAllAdminUsers = () => {
 }
 
 export const getAllUsersByCity = () => {
-  return axiosInstance.get(`/reports/users/${cityName}`)
+  return axiosInstance.get('/reports/users/city', {
+    params: {
+      city: cityName
+    }
+  });
 }
 
 export const getAllUsers = () => {
@@ -19,11 +23,20 @@ export const getAllComplaints = () => {
 }
 
 export const getComplaintsByCity = () => {
-  return axiosInstance.get(`/reports/complaints/city/${cityName}`);
+  return axiosInstance.get('/reports/complaints/city', {
+    params: {
+      city: cityName
+    }
+  });
 }
 
 export const getComplaintsByTypeAndCity = (type) => {
-  return axiosInstance.get(`/reports/complaints/${type}/city/${cityName}`);
+  return axiosInstance.get('/reports/complaints/type/city', {
+    params: {
+      type: type,
+      city: cityName
+    }
+  });
 }
 
 export const getComplaintsByLocalization = (latitude, longitude) => {
@@ -68,5 +81,9 @@ export const getAlertsByPeriod = (startDate, endDate) => {
 }
   
 export const getAlertsByCity = () => {
-    return axiosInstance.get(`/reports/alerts/city/${cityName}`);
+    return axiosInstance.get('/reports/alerts/city', {
+        params: {
+            city: cityName
+        }
+    });
 }
