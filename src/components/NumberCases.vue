@@ -81,6 +81,9 @@ export default {
         totalAlerts:0,
         totalComplaints:0
       },
+      AllUsers:{},
+      AllAlerts:{},
+      AllComplaints:{},
       imageUrl: "",
       token: "",
       city: "",
@@ -97,10 +100,17 @@ export default {
 
   methods: {
     async getData(){
-      this.city = localStorage.getItem("city")
-      this.cardsData.totalUsers = (await Reports.getAllUsersByCity()).data.amountUsers
-      this.cardsData.totalAlerts = (await (Reports.getAlertsByCity())).data.amountAlertByCity
-      this.cardsData.totalComplaints = (await (Reports.getComplaintsByCity())).data.amountComplaintsByCity 
+      this.AllUsers = (await Reports.getAllUsersByCity()).data;
+      this.AllAlerts =( await Reports.getAlertsByCity() ).data;
+      this.AllComplaints = (await Reports.getComplaintsByCity()).data;
+
+      this.mountedCards();
+    },
+
+    async mountedCards(){
+      this.cardsData.totalUsers = this.AllUsers.amountUsers;
+      this.cardsData.totalAlerts =  this.AllAlerts.amountAlertByCity;
+      this.cardsData.totalComplaints = this.AllComplaints.amountComplaintsByCity;
     },
 
     async getAlerts() {
