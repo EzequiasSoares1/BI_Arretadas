@@ -98,9 +98,9 @@ export default {
   methods: {
     async getData(){
       this.city = localStorage.getItem("city")
-      this.cardsData.totalUsers = (await (Reports.getAllUsersByCity())).data.amountUsers
+      this.cardsData.totalUsers = (await Reports.getAllUsersByCity()).data.amountUsers
+      this.cardsData.totalAlerts = (await (Reports.getAlertsByCity())).data.amountAlertByCity
       this.cardsData.totalComplaints = (await (Reports.getComplaintsByCity())).data.amountComplaintsByCity 
-      this.cardsData.totalAlerts = (await (Reports.getAllAlerts())).data.totalAlerts
     },
 
     async getAlerts() {
