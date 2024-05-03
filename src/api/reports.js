@@ -14,6 +14,16 @@ export const getAllUsersByCity = () => {
   });
 }
 
+export const getUsersByPeriod = (startDate, endDate) => {
+  return axiosInstance.get('/reports/users/period', {
+    params: {
+      startDate,
+      endDate,
+      city: cityName
+    }
+  });
+}
+
 export const getAllUsers = () => {
   return axiosInstance.get('/reports/users');
 }
@@ -30,39 +40,12 @@ export const getComplaintsByCity = () => {
   });
 }
 
-export const getComplaintsByTypeAndCity = (type) => {
-  return axiosInstance.get('/reports/complaints/type/city', {
-    params: {
-      type: type,
-      city: cityName
-    }
-  });
-}
-
-export const getComplaintsByLocalization = (latitude, longitude) => {
-  return axiosInstance.get('/reports/complaints/localization', {
-    params: {
-      latitude,
-      longitude
-    }
-  });
-}
-
 export const getComplaintsByPeriod = (startDate, endDate) => {
   return axiosInstance.get('/reports/complaints/period', {
     params: {
       startDate,
-      endDate
-    }
-  });
-}
-
-export const getComplaintsByPeriodAndType = (startDate, endDate, type) => {
-  return axiosInstance.get('/reports/complaints/periodAndType', {
-    params: {
-      startDate,
       endDate,
-      type
+      city: cityName
     }
   });
 }
@@ -74,8 +57,9 @@ export const getAllAlerts = () => {
 export const getAlertsByPeriod = (startDate, endDate) => {
     return axiosInstance.get('/reports/alerts/period', {
         params: {
-        startDate,
-        endDate
+          startDate,
+          endDate,
+          city: cityName
         }
     });
 }

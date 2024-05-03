@@ -27,10 +27,21 @@ Tabela de conteúdos
 
 
 ## Features
-
-- [x] Mapeamento dos bairros onde ocorrem os alertas;
-- [x] Mapeamento dos bairros onde ocorrem as denúncias;
-
+- [x] Buscador por periodo;
+- [x] Visualização do total de usuario, alertas e denuncias
+### Denuncias
+- [x] Mapa das denuncias;
+  - [x] Macadores das localização de cada denuncia;
+  - [x] Data e Hora da denuncia;
+  - [x] Tipo de Denuncia
+- [x] Grafico de denuncias pelo tipo;
+- [x] Grafico de linha numero de ocorrecias por mes e ano;
+### Alertas,
+- [x] Mapa dos Alertas;
+  - [x] Macadores das localização de cada alerta;
+  - [x] Data e Hora que foi emitido o alerta;
+  - [x] Informação sobre medida protetiva
+- [x] Grafico de linha numero de alertas por mes e ano;
 
 ## Como usar
 
@@ -68,6 +79,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - [Vue.js](https://vuejs.org/)
 - [Vuetify](https://vuetifyjs.com/)
 - [Chart.js](https://www.chartjs.org/)
+- [Leaflet](https://leafletjs.com//)
 - [Axios](https://axios-http.com/)
 
 
@@ -94,6 +106,10 @@ As seguintes ferramentas foram usadas na construção do projeto:
     <td align="center"><a href="https://github.com/victoorraphael"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/56162733?v=4" width="100px;"           alt=""/><br /><sub><b>Victor Raphael</b></sub></a><br /><a href="https://github.com/victoorraphael" title="Victor Raphael">👨‍🚀</a>
     </td>
     <td align="center"><a href="https://github.com/ArthurPdaSilva"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/72280602?v=4" width="100px;"           alt=""/><br /><sub><b>Arthur Pereira</b></sub></a><br /><a href="https://github.com/ArthurPdaSilva" title="Arthur Pereira da Silva">👨‍🚀</a>
+    </td>
+    <td align="center"><a href="https://github.com/EzequiasSoares1"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/72280602?v=4" width="100px;" alt=""/><br /><sub><b>Ezequias Soares</b></sub></a><br /><a href="https://github.com/EzequiasSoares1" title="Ezequias Soares de Oliveira">👨‍🚀</a>
+    </td>
+    <td align="center"><a href="https://github.com/Winiicius"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/72280602?v=4" width="100px;" alt=""/><br /><sub><b>Winicius Alexandre</b></sub></a><br /><a href="https://github.com/Winiicius" title="Winicius Alexandre">👨‍🚀</a>
     </td>
   </tr>
 </table>

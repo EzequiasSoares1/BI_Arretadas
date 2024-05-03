@@ -1,0 +1,49 @@
+  <div class="container-chart">
+      <div class="chart-alerts" v-if="isLoadedAlert && !isEmpty">
+        <h2>Por Data (dados em %)</h2>
+        <div class="bar-chart">
+          <bar-chart
+            label="Alertas"
+            :dados="alertsByDates"
+            :key="alertsByDates.__ob__.dep.id"
+          />
+        </div>
+        <h2>Por Bairro (dados em %)</h2>
+        <div class="doughnu-chart">
+          <doughnut-chart
+            label="Por Bairro"
+            :dados="alertsByDistricts"
+            :key="alertsByDistricts.__ob__.dep.id"
+          />
+        </div>
+      </div>
+
+      <div class="chart-complaints" v-if="isLoadedComplaint && !isEmpty">
+        <h2>Por Data (dados em %)</h2>
+        <div class="bar-chart">
+          <bar-chart
+            label="Denúncias"
+            :dados="complaintsByDates"
+            :key="complaintsByDates.__ob__.dep.id"
+          />
+        </div>
+        <h2>Por Bairro (dados em %)</h2>
+        <div class="doughnu-chart">
+          <doughnut-chart
+            label="Por Bairro"
+            :dados="complaintsByDistricts"
+            :key="complaintsByDistricts.__ob__.dep.id"
+          />
+        </div>
+        <h2>Por Tipo (dados em %)</h2>
+        <div class="doughnu-chart">
+          <doughnut-chart
+            label="Por Tipo"
+            :dados="complaintsByTypes"
+            :key="complaintsByDistricts.__ob__.dep.id"
+          />
+        </div>
+      </div>
+
+
+    </div>

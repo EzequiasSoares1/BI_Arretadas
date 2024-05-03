@@ -1,77 +1,57 @@
 <template>
-  <v-container>
-    <Card :allData="cardsData"></Card>
-    <h2>Pesquisar</h2>
-    <Form @my-alerts="getAlerts" @my-complaints="getComplaints" @my-clean="cleanLoading"></Form>
-    <div class="container-chart">
-      <div class="chart-alerts" v-if="isLoadedAlert && !isEmpty">
-        <h2>Por Data (dados em %)</h2>
-        <div class="bar-chart">
-          <bar-chart
-            label="Alertas"
-            :dados="alertsByDates"
-            :key="alertsByDates.__ob__.dep.id"
-          />
-        </div>
-        <h2>Por Bairro (dados em %)</h2>
-        <div class="doughnu-chart">
-          <doughnut-chart
-            label="Por Bairro"
-            :dados="alertsByDistricts"
-            :key="alertsByDistricts.__ob__.dep.id"
-          />
-        </div>
-      </div>
+ <v-container v-if="!isLoading">  
+  <Card :allData="cardsData"></Card>  
+  <br>
+  <Form @my-data="getDataPeriod"  @my-clean="cleanLoading"></Form>
 
-      <div class="chart-complaints" v-if="isLoadedComplaint && !isEmpty">
-        <h2>Por Data (dados em %)</h2>
-        <div class="bar-chart">
-          <bar-chart
-            label="Denúncias"
-            :dados="complaintsByDates"
-            :key="complaintsByDates.__ob__.dep.id"
-          />
-        </div>
-        <h2>Por Bairro (dados em %)</h2>
-        <div class="doughnu-chart">
-          <doughnut-chart
-            label="Por Bairro"
-            :dados="complaintsByDistricts"
-            :key="complaintsByDistricts.__ob__.dep.id"
-          />
-        </div>
-        <h2>Por Tipo (dados em %)</h2>
-        <div class="doughnu-chart">
-          <doughnut-chart
-            label="Por Tipo"
-            :dados="complaintsByTypes"
-            :key="complaintsByDistricts.__ob__.dep.id"
-          />
-        </div>
+  <div class="maps" :key="alertsKey">
+    <h3>Denúncias</h3>
+    <div class="map-wrapper">
+      <LeaMapComplaints class="map" :localizationList="AllComplaints.locationsAndTimes"></LeaMapComplaints>
+      <div class="chart">
+        <DoughnutChart :dados="AllComplaints.complaintsByType"></DoughnutChart>
       </div>
-
-      <h1 class="mensagem" v-if="isEmpty">Me desculpe, mas não foi localizado nenhum chamado proveniente dessa delimitação de tempo :(</h1>
     </div>
+    <br>
+    <LineChartComplaints :dados="AllComplaints.locationsAndTimes"></LineChartComplaints>
+    <br>
+    <h3>Alertas</h3>
+    <div class="map-wrapper-2">
+      <LeaMapAlerts :localizationList="AllAlerts.information"></LeaMapAlerts>
+    </div>
+    <br>
+    <LineChartAlerts :dados="AllAlerts.information"></LineChartAlerts>
+   </div>
   </v-container>
+  <v-overlay v-else>
+    <v-progress-circular indeterminate color="primary"></v-progress-circular>
+  </v-overlay>
 </template>
 
 <script>
 
-import BarChart from "./BarChart.vue";
+import LineChartComplaints from "./LineChartComplaints.vue";
+import LineChartAlerts from "./LineChartAlerts.vue";
+
 import DoughnutChart from "./DoughnutChart.vue";
 import Form from './Form.vue';
 import * as Reports from '../api/reports';
 import Card from "./Card.vue";
+import LeaMapComplaints from "./LeaMapComplaints.vue";
+import LeaMapAlerts from "./LeaMapAlerts.vue";
+
 
 export default {
   name: "numberCases",
   
   components: {
-    BarChart,
+    LineChartComplaints,
     DoughnutChart,
     Form,
     Card,
-    Reports
+    LeaMapComplaints,
+    LeaMapAlerts,
+    LineChartAlerts
   },
 
   data() {
@@ -84,26 +64,43 @@ export default {
       AllUsers:{},
       AllAlerts:{},
       AllComplaints:{},
-      imageUrl: "",
-      token: "",
-      city: "",
+      isLoading: true,
       isLoadedAlert: false,
       isLoadedComplaint: false,
       isEmpty: false,
-  
+      alertsKey: 0,
     };
   },
 
-  mounted(){
+  created() {
     this.getData();
   },
 
   methods: {
-    async getData(){
-      this.AllUsers = (await Reports.getAllUsersByCity()).data;
-      this.AllAlerts =( await Reports.getAlertsByCity() ).data;
-      this.AllComplaints = (await Reports.getComplaintsByCity()).data;
+  
+    async getData() {
+      const todosDados = await Promise.all([
+        Reports.getAllUsersByCity(),
+        Reports.getAlertsByCity(),
+        Reports.getComplaintsByCity(),
+      ]);
 
+      this.AllUsers = todosDados[0].data;
+      this.AllAlerts = todosDados[1].data;
+      this.AllComplaints = todosDados[2].data;
+
+      this.mountedCards();
+    },
+
+    async getDataPeriod(datas) {
+      this.isLoading = true;
+      const [todasAlertas, todasReclamacoes] = await Promise.all([
+        Reports.getAlertsByPeriod(datas.init, datas.final),
+        Reports.getComplaintsByPeriod(datas.init, datas.final),
+      ]);
+
+      this.AllAlerts = todasAlertas.data;
+      this.AllComplaints = todasReclamacoes.data;
       this.mountedCards();
     },
 
@@ -111,31 +108,18 @@ export default {
       this.cardsData.totalUsers = this.AllUsers.amountUsers;
       this.cardsData.totalAlerts =  this.AllAlerts.amountAlertByCity;
       this.cardsData.totalComplaints = this.AllComplaints.amountComplaintsByCity;
+      this.isLoading = false;
+      this.updateMaps();
     },
 
-    async getAlerts() {
-      this.token = localStorage.getItem('token')
-      this.city = localStorage.getItem('city')
-      
-      await Reports.getAlertsByCity()
-      .then((response) => {
-        console.log(response.data)
-      })
+    updateMaps(){
+      this.complaintsKey++;
+      this.alertsKey++;
     },
-
-    async getComplaints(date) {
-      this.token = localStorage.getItem('token')
-      this.city = localStorage.getItem('city')
-      
-      await Reports.getComplaintsByPeriod(date.init, date.final)
-      .then((response) => {
-        console.log(response.data);
-      })
-    },
-
     cleanLoading(){
       this.isLoadedAlert = false;
       this.isLoadedComplaint = false;
+      this.getData();
     },
 
     logout() {
@@ -143,7 +127,6 @@ export default {
       this.$router.replace("/");
     },
   }
-
 };
 </script>
 
@@ -155,34 +138,43 @@ export default {
   padding: inherit;
 }
 
-.showChart {
-  padding-top: 3em;
+H2 {
+  text-align: center;
 }
 
-.chart-alerts {
-  margin: 3em auto 3em auto;
-}
-
-.chart-complaints {
-  margin: 2em auto 3em auto;
-}
-
-.bar-chart {
-  margin: 2em auto 3em auto;
-  border: solid 1px #555;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-}
-
-.doughnu-chart {
-  margin: 2em auto 3em auto;
-  border: solid 1px #555;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+h3 {
+  background-color: #343a40; 
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: 'Arial', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .mensagem {
   font-size: 1.5rem;
   text-align: center;
 }
+.map-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 50%;
+}
+
+.chart{
+  height: 360px;
+  padding-left: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.map{
+  margin-right: 10px;
+}
+
 </style>

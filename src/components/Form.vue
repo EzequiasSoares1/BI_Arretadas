@@ -29,27 +29,12 @@ cv <template>
                     </datepicker>
                 </div>
             </div>
+            <div class="buttom">
+                <v-btn @click="search" class="button-s">Buscar</v-btn>
+                <v-btn @click="cleaner">Limpar</v-btn>
+            </div>
         </div>
-        <br />
-
-        <v-combobox class="type-of-occurrence" v-model="selectedType" :items="types" label="Tipo de ocorrência*">
-        </v-combobox>
-
-        <v-combobox multiple v-if="selectedType == 'Denúncias' && !allTypes" class="type-complaint" v-model="selectedTypeComplaint"
-        :items="typesComplaints" label="Tipo de denúncia*"></v-combobox>
-
-        <v-checkbox
-        v-if="selectedType == 'Denúncias'"
-        v-model="allTypes"
-        :label="`Marque esta opção para selecionar todos os tipos de denúncia.`"
-        ></v-checkbox>
-
-        <div class="buttom">
-            <v-btn @click="search" class="button-s">Buscar</v-btn>
-            <v-btn @click="cleaner">Limpar</v-btn>
-        </div>
-        <br />
-        <small>* Campos obrigatórios</small>
+        <br>
     </div>
 </template>
 
@@ -57,7 +42,6 @@ cv <template>
 import { ptBR } from "vuejs-datepicker/dist/locale";
 import Datepicker from "vuejs-datepicker";
 import moment from "moment";
-import { validateSearch } from '../services/validationSearch';
 
 export default {
     name: "Form",
@@ -70,22 +54,10 @@ export default {
         return {
             initialDate: "",
             finalDate: "",
-            selectedType: "",
             snackbar: false,
             text: "",
             timeout: 5000,
             ptBR: ptBR,
-            types: ["Alertas", "Denúncias"],
-            selectedTypeComplaint: [],
-            allTypes: false,
-            typesComplaints: [
-                "Física",
-                "Moral",
-                "Sexual",
-                "Patrimonial",
-                "Psicológica",
-                "Verbal",
-            ],
         }
     },
 
@@ -105,25 +77,28 @@ export default {
         cleaner() {
             this.initialDate = ""
             this.finalDate = ""
-            this.selectedType = ""
             this.$emit("my-clean")
         },
 
         search() {
-            if(this.allTypes) this.selectedTypeComplaint = ["Todas"];
-            this.text = validateSearch(this.selectedType, this.selectedTypeComplaint, this.initialDate, this.finalDate);
-            if(this.text.length >= 1) this.snackbar = true;
-            else{
-                const dates = {
-                    init: moment(this.initialDate).format("YYYY-MM-DD"),
-                    final: moment(this.finalDate).format("YYYY-MM-DD"),
-                }
-
-                this.selectedType === "Alertas"
-                    ? this.$emit("my-alerts", dates)
-                    : this.$emit("my-complaints", dates, this.selectedTypeComplaint)
+            if(!this.finalDate || !this.initialDate){
+                this.snackbar = true;
+                this.text = "Por favor, defina ambas as datas.";
+                return; 
             }
-        },
+            else if ( moment(this.finalDate).isBefore(moment(this.initialDate))) {
+                this.snackbar = true;
+                this.text = "Por favor, verifique as datas.";
+                return; 
+            } 
+
+            const dates = {
+                init: moment(this.initialDate).format("YYYY-MM-DD"),
+                final: moment(this.finalDate).format("YYYY-MM-DD"),
+            }
+
+            this.$emit("my-data", dates);
+        }
     }
 }
 </script>
@@ -152,6 +127,7 @@ export default {
     margin-right: 10px;
     border-bottom: solid 1px #9e9e9e;
     padding: 5px;
+    z-index: 9999;
 }
 
 .typeSelect {
@@ -167,10 +143,11 @@ export default {
 .buttom {
     margin: 1rem;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
 }
 
 .button-s {
+    margin-right: 0.7rem;
     background-color: #00d1b2 !important;
     color: #FFF !important;
 }
