@@ -107,9 +107,9 @@ As seguintes ferramentas foram usadas na construção do projeto:
     </td>
     <td align="center"><a href="https://github.com/ArthurPdaSilva"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/72280602?v=4" width="100px;"           alt=""/><br /><sub><b>Arthur Pereira</b></sub></a><br /><a href="https://github.com/ArthurPdaSilva" title="Arthur Pereira da Silva">👨‍🚀</a>
     </td>
-    <td align="center"><a href="https://github.com/EzequiasSoares1"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/72280602?v=4" width="100px;" alt=""/><br /><sub><b>Ezequias Soares</b></sub></a><br /><a href="https://github.com/EzequiasSoares1" title="Ezequias Soares de Oliveira">👨‍🚀</a>
+    <td align="center"><a href="https://github.com/EzequiasSoares1"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/87997012?v=4" width="100px;" alt=""/><br /><sub><b>Ezequias Soares</b></sub></a><br /><a href="https://github.com/EzequiasSoares1" title="Ezequias Soares de Oliveira">👨‍🚀</a>
     </td>
-    <td align="center"><a href="https://github.com/Winiicius"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/72280602?v=4" width="100px;" alt=""/><br /><sub><b>Winicius Alexandre</b></sub></a><br /><a href="https://github.com/Winiicius" title="Winicius Alexandre">👨‍🚀</a>
+    <td align="center"><a href="https://github.com/Winiicius"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/102719335?v=4" width="100px;" alt=""/><br /><sub><b>Winicius Alexandre</b></sub></a><br /><a href="https://github.com/Winiicius" title="Winicius Alexandre">👨‍🚀</a>
     </td>
   </tr>
 </table>
